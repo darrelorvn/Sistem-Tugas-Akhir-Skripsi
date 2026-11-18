@@ -1,0 +1,57 @@
+====================================================================
+PANDUAN SINGKAT MENJALANKAN APLIKASI (PAKET GOOGLE DRIVE)
+SISTEM TUGAS AKHIR & SKRIPSI (4 MODUL TERINTEGRASI)
+====================================================================
+
+CATATAN PENTING:
+Folder node_modules/ sengaja dihapus agar ukuran upload/download
+lebih ringan. Anda TIDAK perlu Node.js/npm untuk menjalankan
+aplikasi ini karena hasil build tampilan (public/build/), vendor/,
+file .env, dan database SQLite sudah tersedia dan siap pakai.
+(Node.js & "npm install" hanya perlu jika ingin mengedit & build
+ulang CSS/JS di resources/css atau resources/js.)
+
+--------------------------------------------------------------------
+LANGKAH 1: PASTIKAN PHP 8.4+ TERPASANG
+--------------------------------------------------------------------
+1. Cek versi PHP di PowerShell:
+   php -v
+
+2. Jika belum PHP 8.4+, pasang di Windows lewat PowerShell:
+   winget install --id PHP.PHP.8.4 --accept-package-agreements --accept-source-agreements
+
+   Pastikan ekstensi ini aktif di php.ini (hapus tanda ; di depannya):
+   - extension=curl
+   - extension=fileinfo
+   - extension=mbstring
+   - extension=openssl
+   - extension=pdo_sqlite
+   - extension=sqlite3
+   - extension=pdo_mysql
+   - extension=zip
+
+--------------------------------------------------------------------
+LANGKAH 2: JALANKAN APLIKASI
+--------------------------------------------------------------------
+Buka PowerShell di dalam folder "Sistem Tugas Akhir & Skripsi", lalu:
+
+php artisan serve
+
+Buka browser dan akses:
+http://127.0.0.1:8000
+
+Akun Login Siap Pakai:
+- Admin (Full CRUD + Dashboard) : admin@example.com | password: password
+- User  (Hanya Lihat & Cari)    : user@example.com  | password: password
+
+--------------------------------------------------------------------
+OPSIONAL
+--------------------------------------------------------------------
+1. Jika ingin reset database dari awal:
+   php artisan migrate:fresh --seed --seeder=RuangFasilitasSeeder
+
+2. Jika suatu saat mengedit resources/css atau resources/js dan
+   perlu build ulang public/build/ (butuh Node.js):
+   npm install
+   node "node_modules/vite/bin/vite.js" build
+====================================================================
