@@ -1,26 +1,23 @@
 ====================================================================
-PANDUAN SINGKAT MENJALANKAN APLIKASI (PAKET GOOGLE DRIVE)
+PANDUAN INSTALASI & CARA MENJALANKAN
 SISTEM TUGAS AKHIR & SKRIPSI (4 MODUL TERINTEGRASI)
 ====================================================================
 
-CATATAN PENTING:
-Folder node_modules/ sengaja dihapus agar ukuran upload/download
-lebih ringan. Anda TIDAK perlu Node.js/npm untuk menjalankan
-aplikasi ini karena hasil build tampilan (public/build/), vendor/,
-file .env, dan database SQLite sudah tersedia dan siap pakai.
-(Node.js & "npm install" hanya perlu jika ingin mengedit & build
-ulang CSS/JS di resources/css atau resources/js.)
+Modul yang tersedia:
+1. Mahasiswa         (CRUD + Dashboard Admin)
+2. Dosen Pembimbing  (Profil, NIDN, Jabatan, Kepakaran, Detail)
+3. Topik & Minat     (Taksonomi Topik Riset, Kata Kunci, Detail)
+4. Ruang & Fasilitas (Master Ruang, Nomor Gedung, Fasilitas)
+
 
 --------------------------------------------------------------------
-LANGKAH 1: PASTIKAN PHP 8.4+ TERPASANG
+BAGIAN 1: SYARAT ENVIRONMENT (WAJIB TERPASANG)
 --------------------------------------------------------------------
-1. Cek versi PHP di PowerShell:
-   php -v
-
-2. Jika belum PHP 8.4+, pasang di Windows lewat PowerShell:
+1. PHP 8.4 atau lebih baru
+   Cara cepat pasang di Windows (PowerShell):
    winget install --id PHP.PHP.8.4 --accept-package-agreements --accept-source-agreements
 
-   Pastikan ekstensi ini aktif di php.ini (hapus tanda ; di depannya):
+   Pastikan ekstensi ini aktif di file php.ini (hapus tanda ; di depannya):
    - extension=curl
    - extension=fileinfo
    - extension=mbstring
@@ -30,28 +27,49 @@ LANGKAH 1: PASTIKAN PHP 8.4+ TERPASANG
    - extension=pdo_mysql
    - extension=zip
 
---------------------------------------------------------------------
-LANGKAH 2: JALANKAN APLIKASI
---------------------------------------------------------------------
-Buka PowerShell di dalam folder "Sistem Tugas Akhir & Skripsi", lalu:
+2. Composer (https://getcomposer.org/)
+3. Node.js & npm (https://nodejs.org/)
 
+
+--------------------------------------------------------------------
+BAGIAN 2: JIKA DOWNLOAD / CLONE DARI GITHUB (1 KALI SETUP AWAL)
+--------------------------------------------------------------------
+Buka PowerShell, masuk ke folder project hasil clone/ekstrak ZIP,
+lalu jalankan perintah berikut secara berurutan:
+
+1. Download library PHP & JavaScript:
+   composer install
+   npm install
+
+2. Build tampilan frontend (Vite):
+   - Jika nama folder TIDAK mengandung tanda "&":
+     npm run build
+   - Jika nama folder MENGANDUNG tanda "&" (misal "Sistem Tugas Akhir & Skripsi"):
+     node "node_modules/vite/bin/vite.js" build
+
+3. Siapkan konfigurasi .env & App Key:
+   copy .env.example .env
+   php artisan key:generate
+
+4. Siapkan database SQLite, migrasi & data awal:
+   New-Item -ItemType File -Path database\database.sqlite -Force
+   php artisan migrate --seed --seeder=RuangFasilitasSeeder
+
+*(Catatan: Jika mengambil paket lengkap dari Google Drive yang sudah
+ berisi vendor/, public/build/, .env, dan database.sqlite, lewati
+ Bagian 2 dan langsung lanjut ke Bagian 3.)*
+
+
+--------------------------------------------------------------------
+BAGIAN 3: CARA MENJALANKAN APLIKASI
+--------------------------------------------------------------------
+Jalankan perintah ini di dalam folder project:
 php artisan serve
 
-Buka browser dan akses:
+Lalu buka browser dan akses:
 http://127.0.0.1:8000
 
 Akun Login Siap Pakai:
 - Admin (Full CRUD + Dashboard) : admin@example.com | password: password
 - User  (Hanya Lihat & Cari)    : user@example.com  | password: password
-
---------------------------------------------------------------------
-OPSIONAL
---------------------------------------------------------------------
-1. Jika ingin reset database dari awal:
-   php artisan migrate:fresh --seed --seeder=RuangFasilitasSeeder
-
-2. Jika suatu saat mengedit resources/css atau resources/js dan
-   perlu build ulang public/build/ (butuh Node.js):
-   npm install
-   node "node_modules/vite/bin/vite.js" build
 ====================================================================
